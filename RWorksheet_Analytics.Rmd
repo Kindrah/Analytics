@@ -25,6 +25,7 @@ session
 1.  
 
 ```{r}
+library(rvest)
 title <- scrape(session)%>%
 html_nodes("h3.ipc-title__text")%>%
 html_text
@@ -36,46 +37,77 @@ split_df <- strsplit(as.character(subsettt$ranks), ".", fixed = TRUE )
 split_df<- data.frame(do.call(rbind, subsettt))
 subsettt
 
-rate <- scrape(session)%>%
-html_nodes("span.ipc-rating-star--imdb")%>%
-html_text
 
-subrate <- as.data.frame(rate[1:50])
-colnames(subrate) <- "rating"
-split_df2 <- strsplit(as.character(subrate$voteCount), ".", fixed = TRUE )
+
+
+  
+
+```
+1.
+```{r}
+
+votec <- scrape(session) %>%
+  html_nodes("span.ipc-rating-star--voteCount") %>%
+  html_text
+subvote <- as.data.frame(votec[1:50])
+colnames(subvote) <- "votecount"
+split_df2 <- strsplit(as.character(subvote$voteCount), ".", fixed = TRUE )
 split_df2 <- data.frame(do.call(rbind, subrate))
-subrate
+subvote
 
-midata <- data.frame(
-  title = subsettt,
-  rate = rate
+```
+
+
+1.  
+
+```{r}
+library(rvest)
+library(stringr)
+rate <- scrape(session) %>%
+  html_nodes("span.ipc-rating-star--imdb")  %>%
+html_attr("aria-label")
+rate
+
+rate_sub<- as.data.frame(rate[2:51])
+head(rate_sub)
+colnames(rate_sub) <- "rate"
+split_df <- strsplit(as.character(rate_sub$rate),".",fixed = TRUE)
+split_df <- data.frame(do.call(rbind,split_df))
+
+
+head(rate_sub)
+
+
+
+
+```
+
+1.  extract ratings
+
+```{r}
+ratesubs<- str_extract(rate_sub$rate, "\\d+\\.\\d+")
+ratesubs
+
+```
+1.Temporary data frame
+```{r}
+wedata <- data.frame(
+  Title = subsettt,
+  Rate = ratesubs,
+  Vote_count = voteCount
 )
-midata
+wedata
+```
+1. number of episodes
+```{r}
+year <- scrape(session)%>%
+  html_nodes("span.sc-479faa3c-8.bNrEFi.cli-title-metadata-item") %>%
+  html_text
+year
+
 
   
 
 ```
 
-1.  
 
-```{r}
-eps <- scrape(session)%>%
-html_nodes("div.sc-479faa3c-7.jXgjdT.cli-title-metadata")%>%
-html_text
-eps
-
-subset3 <- as.data.frame(eps[1:50])
-colnames(subset3) <- "year"
-split_df3 <- strsplit(as.character(subset3$episodes), ".", fixed = TRUE )
-split_df3 <- data.frame(do.call(rbind, subset3))
-
-subset3
-
-
-```
-
-1.  
-
-```{r}
-
-```
