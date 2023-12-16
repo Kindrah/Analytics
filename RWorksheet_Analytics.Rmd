@@ -105,9 +105,31 @@ year <- scrape(session)%>%
   html_text
 year
 
+2.
 
-  
 
+
+
+
+3. 
+```{r}
+ggplot(dataf, 
+       aes(x = year)) +
+  geom_bar(stat = "count", fill = "darkblue") +
+  labs(title = "TV Shows Released by Year",
+       x = "Release Year",
+       y = "Number of TV Shows Released") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+# Find the year with the most TV shows released
+mostTvshow <- dataf %>%
+  group_by(year) %>%
+  summarise(total_shows = n())
+
+mostyear <- mostTvshow$year[which.max(mostTvshow$total_shows)]
+
+cat("The year with the most TV shows released is ", mostyear)
 ```
 
 
