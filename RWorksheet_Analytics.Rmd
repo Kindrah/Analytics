@@ -110,4 +110,91 @@ year
 
 ```
 
+#___________________________SALINAS________________
+4. Select 3 products from Amazon of the same category. Extract the price, description, ratings and
+reviews of each product.
+
+```{r}
+# Install and load required packages
+
+library(rvest)
+library(dplyr)
+library(httr) 
+library(xml2)
+library(purrr)
+library(stringr)
+
+
+
+product1 <- read_html("https://www.amazon.com/dp/B07KRY43KN/ref=s9_acsd_al_bw_c2_x_2_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+product2 <- read_html("https://www.amazon.com/dp/B01EZV35QU/ref=s9_acsd_al_bw_c2_x_9_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+product3 <- read_html("https://www.amazon.com/dp/B099WTN2TR/ref=s9_acsd_al_bw_c2_x_6_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+
+```
+
+```{r}
+# ALL COMBINED DATA IN ONE FRAME
+combined_data <- cbind( Price,result_df, ratings_data, reviews_df)
+
+print("Combined Data:")
+print(combined_data)
+```
+
+
+#----------------------------------------------------
+
+     PRICE
+#___________________________________________________
+
+
+PRICE 1,2 and 3
+```{r}
+product1 %>% 
+    html_nodes("span.a-offscreen") %>% 
+    html_text() ->  price1
+
+first_column <- price1[1]
+
+first_column <- price1[[1]]
+
+print(first_column)
+
+#..........................................
+
+product2 %>% 
+    html_nodes("span.a-offscreen") %>% 
+    html_text() ->  price2
+
+first_column2 <- price2[1]
+
+first_column2 <- price2[[1]]
+
+print(first_column2) 
+
+#........................................
+
+product3 %>% 
+    html_nodes("span.a-offscreen") %>% 
+    html_text() ->  price3
+
+
+first_column3 <- price3[1]
+
+first_column3 <- price3[[1]]
+
+print(first_column3) 
+
+#............................................
+
+Price <-data.frame(
+   Price = c(first_column, first_column2, first_column3)
+)
+
+print(Price)
+
+
+```
 
