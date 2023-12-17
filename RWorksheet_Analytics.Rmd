@@ -109,5 +109,201 @@ year
   
 
 ```
+#NUMBER4 
+
+#----------------------------------------------------
+
+           DESCRIPTION
+#___________________________________________________
+#--------------------------------------------------------
+
+DESCRIPTION
+{r}
+#number1
+des <- product1 %>% 
+  html_nodes("span.a-list-item") %>% 
+  html_text() 
+
+descrange <- paste(des[33:37], collapse = " ")
+
+{r}
+des <- product2%>% 
+  html_nodes("span.a-list-item") %>% 
+  html_text() 
+
+descrange2 <- paste(des[63:67], collapse = " ")
+
+{r}
+des <- product3%>% 
+  html_nodes("span.a-list-item") %>% 
+  html_text() 
+
+descrange3 <- paste(des[58:62], collapse = " ")
 
 
+
+DATA FRAME FOR DESCRIPTION
+{r}
+
+result_df <- data.frame(Description = c(descrange, descrange2, descrange3))
+
+# Print the resulting data frame
+print(result_df)
+
+#------------------------------------------------
+#----------------------------------------------------
+
+             RATINGS
+#___________________________________________________
+
+RATINGS #1
+{r}
+library(rvest)
+
+#number 1 
+product1 <- read_html("https://www.amazon.com/dp/B07KRY43KN/ref=s9_acsd_al_bw_c2_x_2_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+# Assuming product1 is your HTML document or webpage content
+# Replace "your_selector_here" with the appropriate CSS selector for your case
+rate1 <- product1 %>%
+  html_nodes("span.a-size-base#acrCustomerReviewText") %>%
+  html_text()
+
+# Extract only numeric data using regular expression
+numeric_data <- as.numeric(gsub("\\D", "", rate1))
+
+# Format numeric data with commas
+data1 <- format(numeric_data, big.mark = ",")
+
+# Print the formatted numeric data
+print(data1)
+
+
+#....................
+
+RATINGS #2
+{r}
+
+library(rvest)
+
+#number 2
+product2 <- read_html("https://www.amazon.com/dp/B01EZV35QU/ref=s9_acsd_al_bw_c2_x_9_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+# Assuming product1 is your HTML document or webpage content
+# Replace "your_selector_here" with the appropriate CSS selector for your case
+rate2 <- product2 %>%
+  html_nodes("span.a-size-base#acrCustomerReviewText") %>%
+  html_text()
+
+# Extract only numeric data using regular expression
+numeric_data2 <- as.numeric(gsub("\\D", "", rate2))
+
+# Format numeric data with commas
+data2 <- format(numeric_data2, big.mark = ",")
+
+# Print the formatted numeric data
+print(data2)
+
+{r}
+library(rvest)
+
+#number 3
+product3 <- read_html("https://www.amazon.com/dp/B099WTN2TR/ref=s9_acsd_al_bw_c2_x_6_i?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=GZGJJ856P8VPY486DVX2&pf_rd_t=101&pf_rd_p=b48f1b52-3d78-40aa-8e5b-0e5b1e8f2dba&pf_rd_i=21217035011")
+
+# Assuming product1 is your HTML document or webpage content
+# Replace "your_selector_here" with the appropriate CSS selector for your case
+rate3 <- product3 %>%
+  html_nodes("span.a-size-base#acrCustomerReviewText") %>%
+  html_text()
+
+# Extract only numeric data using regular expression
+numeric_data<- as.numeric(gsub("\\D", "", rate3))
+
+# Format numeric data with commas
+data3 <- format(numeric_data, big.mark = ",")
+
+# Print the formatted numeric data
+print(data3)
+
+
+
+DATA FRAME FOR RATINGS
+{r}
+
+
+# Extract ratings for each product
+ratings <- c(data1, data2, data3)
+
+# Create a data frame with ratings
+ratings_data <- data.frame(Ratings = ratings)
+
+# Print the data frame
+print(ratings_data)
+
+
+#----------------------------------------------------
+
+                 REVIEWS
+#___________________________________________________
+
+reviews #1
+
+{r}
+library(rvest)
+library(stringr)
+
+
+# Extract the text from the specified span
+review_text <- product1 %>%
+  html_node("span.a-size-base.review-text") %>%
+  html_text()
+
+# Remove newline characters
+review_text <- str_replace_all(review_text, "\n", "")
+
+# Print the extracted review text without newline characters
+cat(review_text, sep = " ")
+
+
+
+
+review# 2
+{r}
+library(rvest)
+library(stringr)
+
+
+# Extract the text from the specified span
+review_text2 <- product2 %>%
+  html_node("span.a-size-base.review-text") %>%
+  html_text()
+
+# Remove newline characters
+review_text2 <- str_replace_all(review_text2, "\n", "")
+
+# Print the extracted review text without newline characters
+cat(review_text, sep = " ")
+
+review3
+{r}
+
+# Extract the text from the specified span
+review_text3 <- product3 %>%
+  html_node("span.a-size-base.review-text") %>%
+  html_text()
+
+# Remove newline characters
+review_text3 <- str_replace_all(review_text3, "\n", "")
+
+# Print the extracted review text without newline characters
+cat(review_text3, sep = " ")
+
+DATA FRAME FOR REVIEWS
+
+{r}
+reviews_df <- data.frame(
+  ReviewText = c(review_text, review_text2, review_text3)
+)
+
+# Print the combined data frame
+print(reviews_df)
