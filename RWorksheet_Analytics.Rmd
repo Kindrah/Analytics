@@ -131,6 +131,7 @@ newdata
 ```
 3.
 ```{r}
+library(ggplot2)
 ggplot(dataf, 
        aes(x = year)) +
   geom_bar(stat = "count", fill = "darkblue") +
@@ -150,6 +151,7 @@ mostyear <- mostTvshow$year[which.max(mostTvshow$total_shows)]
 cat("The year with the most TV shows released is ", mostyear)
 
 ```
+
 
 
 
