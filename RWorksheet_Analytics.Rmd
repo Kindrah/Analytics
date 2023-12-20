@@ -1,113 +1,155 @@
 ---
-title: "Untitled"
+title: "RWorksheet_Analytics"
+author: "Tamayo,Salinas, Loredo, Amuan, & Juntanilla"
+date: "2023-12-09"
 output: pdf_document
-date: "2023-11-29"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-1.  
-
+URL and libraries
 ```{r}
 library(rvest)
 library(dplyr)
 library(polite)
-
+library(stringr)
 url <- "https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250"
 
 session <- bow(url,user_agent = "Educational Purposes")
 session
 
 ```
-
-1.  
-
+1.
 ```{r}
+#title and ranks
 library(rvest)
 title <- scrape(session)%>%
 html_nodes("h3.ipc-title__text")%>%
 html_text
 title
 
+#subset title
 subsettt <- as.data.frame(title[2:51])
-colnames(subsettt) <- "title"
+
+colnames(subsettt) <- "ranks"
 split_df <- strsplit(as.character(subsettt$ranks), ".", fixed = TRUE )
-split_df<- data.frame(do.call(rbind, subsettt))
-subsettt
+split_df<- data.frame(do.call(rbind, split_df))
+#remove duplicate columns
+split_df <- split_df[-c(3:5)]
+#rename columns
+colnames(split_df) <- c("ranks","title") 
+split_df
+#make into a data frame
+mekdf <- as.data.frame(split_df)
+mekdf
 
 
-
-
-  
-
-```
-1.
-```{r}
-
-votec <- scrape(session) %>%
-  html_nodes("span.ipc-rating-star--voteCount") %>%
-  html_text
-subvote <- as.data.frame(votec[1:50])
-colnames(subvote) <- "votecount"
-split_df2 <- strsplit(as.character(subvote$voteCount), ".", fixed = TRUE )
-split_df2 <- data.frame(do.call(rbind, subrate))
-subvote
-
-```
-
-
-1.  
-
-```{r}
-library(rvest)
-library(stringr)
+#scraping the imdb rating
 rate <- scrape(session) %>%
   html_nodes("span.ipc-rating-star--imdb")  %>%
 html_attr("aria-label")
 rate
-
+#subset the scraped data
 rate_sub<- as.data.frame(rate[2:51])
 head(rate_sub)
+#renaming the column
 colnames(rate_sub) <- "rate"
-split_df <- strsplit(as.character(rate_sub$rate),".",fixed = TRUE)
-split_df <- data.frame(do.call(rbind,split_df))
+split_df3 <- strsplit(as.character(rate_sub$rate),".",fixed = TRUE)
+split_df3 <- data.frame(do.call(rbind,split_df))
+#extract only the ratings
+ratings<- str_extract(rate_sub$rate, "\\d+\\.\\d+")
+ratings
+#make this into a data frame
+rates <- as.data.frame(ratings)
 
-
-head(rate_sub)
-
-
-
-
-```
-
-1.  extract ratings
-
-```{r}
-ratesubs<- str_extract(rate_sub$rate, "\\d+\\.\\d+")
-ratesubs
-
-```
-1.Temporary data frame
-```{r}
-wedata <- data.frame(
-  Title = subsettt,
-  Rate = ratesubs,
-  Vote_count = voteCount
-)
-wedata
-```
-1. number of episodes
-```{r}
-year <- scrape(session)%>%
-  html_nodes("span.sc-479faa3c-8.bNrEFi.cli-title-metadata-item") %>%
+#scraping vote counts
+votec <- scrape(session) %>%
+  html_nodes("span.ipc-rating-star--voteCount") %>%
   html_text
-year
+#subset the scraped data of vote counts
+subvote <- as.data.frame(votec[1:50])
+#renaming columns
+colnames(subvote) <- "votecount"
+split_df2 <- strsplit(as.character(subvote$voteCount), ".", fixed = TRUE )
+split_df2 <- data.frame(do.call(rbind, subvote))
+subvote
 
 
-  
+#Scrape the year and episodes
+shesh <- read_html(url)
+
+# Extract the HTML structure of the div class
+div_elements <- shesh %>%
+  html_nodes("div.sc-43986a27-7.dBkaPT.cli-title-metadata")
+
+# Create an empty list to store the extracted information
+results_list <- list()
+
+# Loop through each div element
+for (i in 1:min(length(div_elements), 50)) {
+  # Extract all span elements within each div
+  spans <- div_elements[i] %>%
+    html_nodes("span.sc-43986a27-8.jHYIIK.cli-title-metadata-item")
+
+  # Extract and store the text from each span
+  span_texts <- sapply(spans, function(span) {
+    span_text <- span %>% html_text()
+    return(span_text)
+  })
+
+  # Store the extracted information in the results list
+  results_list[[i]] <- span_texts
+}
+
+# Convert the results list to a data frame 
+results_df <- do.call(rbind.data.frame, results_list)
+
+# Set column names based on the extracted spans 
+colnames(results_df) <- paste0("span_", 1:ncol(results_df))
+
+newcol <- c("year", "episodes", "guidance")
+colnames(results_df) <- newcol
+# Removing the third column
+results_df <- results_df[, -which(names(results_df) == "guidance")]
+
+# Print or return the results
+print(results_df)
+
+dataf <- as.data.frame(results_df)
+
+
+# Combine in one data frame
+newdata <- data.frame(
+  mekdf,
+ rates,
+  Vote_count = subvote,
+  dataf
+
+)
+newdata
+```
+3.
+```{r}
+ggplot(dataf, 
+       aes(x = year)) +
+  geom_bar(stat = "count", fill = "darkblue") +
+  labs(title = "TV Shows Released by Year",
+       x = "Release Year",
+       y = "Number of TV Shows Released") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+# Find the year with the most TV shows released
+mostTvshow <- dataf %>%
+  group_by(year) %>%
+  summarise(total_shows = n())
+
+mostyear <- mostTvshow$year[which.max(mostTvshow$total_shows)]
+
+cat("The year with the most TV shows released is ", mostyear)
 
 ```
+
 
 
