@@ -151,6 +151,305 @@ mostyear <- mostTvshow$year[which.max(mostTvshow$total_shows)]
 cat("The year with the most TV shows released is ", mostyear)
 
 ```
+
+
+#number 2 
+
+```{r} 
+scrape_reviews <- function(url) {
+  page <- read_html(url)
+  title_reviews <- page %>% 
+    html_nodes(".title") %>% 
+    html_text()
+  
+  rating_reviews <- page %>% 
+    html_nodes(".rating-other-user-rating") %>%
+    html_text()
+  
+  dates_reviews <- page %>% 
+    html_nodes(".review-date") %>%
+    html_text()
+  
+  users_reviews <- page %>% 
+    html_nodes(".display-name-link") %>%
+    html_text()
+  
+  text_review <- page %>%
+    html_nodes("div.text.show-more__control")%>%
+    html_text()
+  
+  
+  max_length <- max(length(title_reviews), length(rating_reviews), length(dates_reviews), length(users_reviews), length(text_review))
+  
+  
+  Nachange <- function(x, target_length) {
+    if (length(x) < target_length) {
+      c(x, rep(NA, target_length - length(x)))
+    } else {
+      x
+    }
+  }
+  
+  
+  title_reviews <- Nachange(title_reviews, max_length)
+  rating_reviews <- Nachange(rating_reviews, max_length)
+  dates_reviews <- Nachange(dates_reviews, max_length)
+  users_reviews <- Nachange(users_reviews, max_length)
+  text_review <- Nachange(text_review, max_length)
+  
+  # Create a data frame
+  reviewsdata1 <- data.frame(
+    TITLE = title_reviews,
+    RATING = rating_reviews,
+    DATE = dates_reviews,
+    USER = users_reviews,
+    USER = text_review
+  )
+  
+  return(reviewsdata1)
+}
+tvshow1 <- c("https://www.imdb.com/title/tt1844624/reviews/?ref_=tt_ov_rt")
+reviews1 <- scrape_reviews(tvshow1[1]) 
+reviews1
+```
+
+
+```{r} 
+scrape_reviews <- function(url) {
+  page <- read_html(url)
+  title_reviews <- page %>% 
+    html_nodes(".title") %>% 
+    html_text()
+  
+  rating_reviews <- page %>% 
+    html_nodes(".rating-other-user-rating") %>%
+    html_text()
+  
+  dates_reviews <- page %>% 
+    html_nodes(".review-date") %>%
+    html_text()
+  
+  users_reviews <- page %>% 
+    html_nodes(".display-name-link") %>%
+    html_text()
+  
+  text_review <- page %>%
+    html_nodes("div.text.show-more__control")%>%
+    html_text()
+  
+  
+  max_length <- max(length(title_reviews), length(rating_reviews), length(dates_reviews), length(users_reviews), length(text_review))
+  
+  
+  Nachange <- function(x, target_length) {
+    if (length(x) < target_length) {
+      c(x, rep(NA, target_length - length(x)))
+    } else {
+      x
+    }
+  }
+  
+  
+  title_reviews <- Nachange(title_reviews, max_length)
+  rating_reviews <- Nachange(rating_reviews, max_length)
+  dates_reviews <- Nachange(dates_reviews, max_length)
+  users_reviews <- Nachange(users_reviews, max_length)
+  text_review <- Nachange(text_review, max_length)
+  
+  # Create a data frame
+  reviewsdata2 <- data.frame(
+    TITLE = title_reviews,
+    RATING = rating_reviews,
+    DATE = dates_reviews,
+    USER = users_reviews,
+    USER = text_review
+  )
+  
+  return(reviewsdata2)
+}
+tvshow2 <- c("https://www.imdb.com/title/tt0436992/reviews/?ref_=tt_ov_rt")
+reviews2 <- scrape_reviews(tvshow2[1]) 
+reviews2
+```
+
+```{r} 
+scrape_reviews <- function(url) {
+  page <- read_html(url)
+  title_reviews <- page %>% 
+    html_nodes(".title") %>% 
+    html_text()
+  
+  rating_reviews <- page %>% 
+    html_nodes(".rating-other-user-rating") %>%
+    html_text()
+  
+  dates_reviews <- page %>% 
+    html_nodes(".review-date") %>%
+    html_text()
+  
+  users_reviews <- page %>% 
+    html_nodes(".display-name-link") %>%
+    html_text()
+  
+  text_review <- page %>%
+    html_nodes("div.text.show-more__control")%>%
+    html_text()
+  
+  
+  max_length <- max(length(title_reviews), length(rating_reviews), length(dates_reviews), length(users_reviews), length(text_review))
+  
+  
+  Nachange <- function(x, target_length) {
+    if (length(x) < target_length) {
+      c(x, rep(NA, target_length - length(x)))
+    } else {
+      x
+    }
+  }
+  
+  
+  title_reviews <- Nachange(title_reviews, max_length)
+  rating_reviews <- Nachange(rating_reviews, max_length)
+  dates_reviews <- Nachange(dates_reviews, max_length)
+  users_reviews <- Nachange(users_reviews, max_length)
+  text_review <- Nachange(text_review, max_length)
+  
+  # Create a data frame
+  reviewsdata3 <- data.frame(
+    TITLE = title_reviews,
+    RATING = rating_reviews,
+    DATE = dates_reviews,
+    USER = users_reviews,
+    USER = text_review
+  )
+  
+  return(reviewsdata3)
+}
+tvshow3 <- c("https://www.imdb.com/title/tt12343534/reviews/?ref_=tt_ov_rt")
+reviews3 <- scrape_reviews(tvshow3[1]) 
+
+reviews3
+```
+
+```{r} 
+scrape_reviews <- function(url) {
+  page <- read_html(url)
+  title_reviews <- page %>% 
+    html_nodes(".title") %>% 
+    html_text()
+  
+  rating_reviews <- page %>% 
+    html_nodes(".rating-other-user-rating") %>%
+    html_text()
+  
+  dates_reviews <- page %>% 
+    html_nodes(".review-date") %>%
+    html_text()
+  
+  users_reviews <- page %>% 
+    html_nodes(".display-name-link") %>%
+    html_text()
+  
+  text_review <- page %>%
+    html_nodes("div.text.show-more__control")%>%
+    html_text()
+  
+  
+  max_length <- max(length(title_reviews), length(rating_reviews), length(dates_reviews), length(users_reviews), length(text_review))
+  
+  
+  Nachange <- function(x, target_length) {
+    if (length(x) < target_length) {
+      c(x, rep(NA, target_length - length(x)))
+    } else {
+      x
+    }
+  }
+  
+  
+  title_reviews <- Nachange(title_reviews, max_length)
+  rating_reviews <- Nachange(rating_reviews, max_length)
+  dates_reviews <- Nachange(dates_reviews, max_length)
+  users_reviews <- Nachange(users_reviews, max_length)
+  text_review <- Nachange(text_review, max_length)
+  
+  # Create a data frame
+  reviewsdata4 <- data.frame(
+    TITLE = title_reviews,
+    RATING = rating_reviews,
+    DATE = dates_reviews,
+    USER = users_reviews,
+    USER = text_review
+  )
+  
+  return(reviewsdata4)
+}
+tvshow4 <- c("https://www.imdb.com/title/tt2861424/reviews/?ref_=tt_ov_rt")
+reviews4 <- scrape_reviews(tvshow4[1]) 
+
+reviews4
+```
+
+```{r} 
+scrape_reviews <- function(url) {
+  page <- read_html(url)
+  title_reviews <- page %>% 
+    html_nodes(".title") %>% 
+    html_text()
+  
+  rating_reviews <- page %>% 
+    html_nodes(".rating-other-user-rating") %>%
+    html_text()
+  
+  dates_reviews <- page %>% 
+    html_nodes(".review-date") %>%
+    html_text()
+  
+  users_reviews <- page %>% 
+    html_nodes(".display-name-link") %>%
+    html_text()
+  
+  text_review <- page %>%
+    html_nodes("div.text.show-more__control")%>%
+    html_text()
+  
+  
+  max_length <- max(length(title_reviews), length(rating_reviews), length(dates_reviews), length(users_reviews), length(text_review))
+  
+  
+  Nachange <- function(x, target_length) {
+    if (length(x) < target_length) {
+      c(x, rep(NA, target_length - length(x)))
+    } else {
+      x
+    }
+  }
+  
+  
+  title_reviews <- Nachange(title_reviews, max_length)
+  rating_reviews <- Nachange(rating_reviews, max_length)
+  dates_reviews <- Nachange(dates_reviews, max_length)
+  users_reviews <- Nachange(users_reviews, max_length)
+  text_review <- Nachange(text_review, max_length)
+  
+  # Create a data frame
+  reviewsdata5 <- data.frame(
+    TITLE = title_reviews,
+    RATING = rating_reviews,
+    DATE = dates_reviews,
+    USER = users_reviews,
+    USER = text_review
+  )
+  
+  return(reviewsdata5)
+}
+tvshow5 <- c("https://www.imdb.com/title/tt1520211/reviews/?ref_=tt_ov_rt")
+reviews5 <- scrape_reviews(tvshow5[1]) 
+
+reviews5
+```
+#end number 2-----------------
+
 FINAL CHANGES
 
 4. Select 3 products from Amazon of the same category. Extract the price, description, ratings and reviews of each product.
